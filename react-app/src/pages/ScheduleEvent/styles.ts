@@ -1,12 +1,30 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+const scrollbarThin = css`
+  &::-webkit-scrollbar-track {
+    background-color: #deb887;
+  }
+
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  scrollbar-color: rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.15);
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+`;
 
 export const WraperScheduleEvent = styled.div`
   height: 100vh;
-  width: 100%;
+  width: 50%;
   display: flex;
   flex-direction: column;
 
-  @media (min-width: 768px) {
+  @media (min-width: 1500px) {
     flex-direction: row;
   }
 `;
@@ -17,22 +35,8 @@ export const Calendar = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-
-  .picker {
-    padding: 1rem;
-    border-radius: 1rem;
-    height: 350px;
-    width: 350px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    background: rgba(70, 70, 70, 0.58);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    border: 1px solid rgba(70, 70, 70, 0.3);
+  > div {
+    background-color: #deb887;
   }
 `;
 export const ListEvents = styled.div`
@@ -43,6 +47,13 @@ export const ListEvents = styled.div`
   overflow: auto;
   height: 100vh;
   max-height: 500px;
+  ${scrollbarThin}
+
+  .card {
+    width: 100%;
+    max-width: 300px;
+    height: 150px;
+  }
 
   .card div button {
     border: none;

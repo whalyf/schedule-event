@@ -11,6 +11,7 @@ import { schema } from './schema';
 
 // STYLES
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import api from '../../services';
 import { WrapperRegister } from './styles';
 
@@ -22,22 +23,24 @@ export interface IFormValues {
 
 export function Register() {
   const navigate = useNavigate();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<IFormValues>({
+  const { register, handleSubmit } = useForm<IFormValues>({
     resolver: yupResolver(schema),
   });
 
   const submit = handleSubmit(async ({ email, password, name }) => {
     try {
-      const response = await api.post('/users', {
-        email,
-        password,
-        name,
-      });
-      console.log(response);
+      await api
+        .post('/users', {
+          email,
+          password,
+          name,
+        })
+        .then((response) => {
+          toast.success(response.data.message);
+        })
+        .catch((err) => {
+          toast.error(err.response.data.message);
+        });
     } catch (err) {
       console.log(err);
     }

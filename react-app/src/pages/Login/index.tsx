@@ -10,9 +10,8 @@ import { CardBlur } from '../../components/CardBlur';
 
 // STYLES
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { Input } from '../../components/Input';
-import api from '../../services';
+import { useAuth } from '../../hooks/useAuth';
 import { WrapperLogin } from './styles';
 
 interface IFormValues {
@@ -22,6 +21,7 @@ interface IFormValues {
 
 export function Login() {
   const navigate = useNavigate();
+  const { signIn } = useAuth();
   const schema = yup.object().shape({
     email: yup
       .string()
@@ -31,22 +31,12 @@ export function Login() {
     password: yup.string().required('Campo de senha obrigatório'),
   });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<IFormValues>({
+  const { register, handleSubmit } = useForm<IFormValues>({
     resolver: yupResolver(schema),
   });
 
   const submit = handleSubmit(async ({ email, password }) => {
-    try {
-      const response = await api.post(`/users/${email}`, { password });
-      toast.info(response.data.message);
-      console.log(response);
-    } catch (err) {
-      // console.log(err);
-    }
+    await signIn({ email, password });
   });
 
   return (

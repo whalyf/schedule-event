@@ -25,9 +25,11 @@ export class UsersController {
 
     if (!userAlreadyExists) {
       await this.usersService.create(createUserDto);
-      return res.status(HttpStatus.CREATED).json({ message: 'User Created' });
+      return res.status(HttpStatus.CREATED).json({ message: 'Usuário criado' });
     }
-    return res.status(HttpStatus.OK).json({ message: 'User already exists' });
+    return res
+      .status(HttpStatus.CONFLICT)
+      .json({ message: 'Usário já existe no sistema' });
   }
 
   @Get()
@@ -45,10 +47,12 @@ export class UsersController {
 
     if (!result) {
       return res
-        .status(HttpStatus.OK)
+        .status(HttpStatus.NOT_FOUND)
         .json({ message: 'Usuário não encontrado' });
     }
 
-    return res.status(HttpStatus.OK).json({ message: 'Login Aprovado' });
+    return res
+      .status(HttpStatus.OK)
+      .json({ message: 'Login Aprovado', user: result });
   }
 }

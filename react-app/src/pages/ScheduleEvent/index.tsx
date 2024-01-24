@@ -1,12 +1,3 @@
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { StaticDateTimePicker } from '@mui/x-date-pickers/StaticDateTimePicker';
-import 'dayjs/locale/pt-br';
-import { useCallback, useEffect, useState } from 'react';
-import { FaPencilAlt, FaRegTrashAlt } from 'react-icons/fa';
-import { CardBlur } from '../../components/CardBlur';
-import api from '../../services';
-// STYLES
 import {
   Button,
   Dialog,
@@ -16,25 +7,56 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material';
+import {
+  LocalizationProvider,
+  MobileDateTimePicker,
+} from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { StaticDateTimePicker } from '@mui/x-date-pickers/StaticDateTimePicker';
 import dayjs from 'dayjs';
-import 'react-day-picker/dist/style.css';
+import 'dayjs/locale/pt-br';
+import { useCallback, useEffect, useState } from 'react';
+import { FaPencilAlt, FaRegTrashAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+// COMPONENTS
+import { CardBlur } from '../../components/CardBlur';
+// CONTEXTS
+import { useAuth } from '../../hooks/useAuth';
+// CONTROLLERS
+import { SchedulesController } from './controller';
+// STYLES
+import 'react-day-picker/dist/style.css';
 import { Calendar, ListEvents, WraperScheduleEvent } from './styles';
 
-interface ISchedule {
-  id: string;
-  description: string;
-  dateStart: Date;
-  dateEnd: Date;
-  user_email: string;
-}
-
 export const ScheduleEvent = () => {
+  const { user } = useAuth();
+  const {
+    fetchEvents,
+    handleCreate,
+    handleDeleteEvent,
+    handleEditEvent,
+    allUserEvents,
+  } = SchedulesController(user.email);
+
   const [loadingEvents, setLoadingEvents] = useState(false);
-  const [eventsRegistered, setEventsRegistered] = useState<ISchedule[]>([]);
   const [open, setOpen] = useState(false);
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date | null>();
+
+  const [deleteEventModal, setDeleteEventModal] = useState({
+    open: false,
+    eventId: '',
+    startDate: new Date(),
+    description: '',
+  });
+
+  const [editEventModal, setEditEventModal] = useState({
+    open: false,
+    eventId: '',
+    startDate: new Date(),
+    endDate: new Date(),
+    description: '',
+  });
 
   const handleSetOpen = useCallback(() => {
     setOpen(!open);
@@ -43,45 +65,20 @@ export const ScheduleEvent = () => {
 
   const handleCreateEvent = useCallback(
     async (description: string) => {
-      const response = await api.post(
-        '/schedules',
-        {
-          description,
-          dateStart: startDate,
-          dateEnd: endDate,
-        },
-        {
-          headers: {
-            'user-email': 'usuario3@gmail.com',
-          },
-        },
-      );
-      toast.info(response.data.message);
+      if (!endDate) {
+        toast.error('Data final não foi selecionada');
+      } else await handleCreate(description, startDate, endDate);
+
       handleSetOpen();
     },
-    [startDate, endDate, handleSetOpen],
+    [startDate, endDate, handleSetOpen, handleCreate],
   );
-
-  const fetchEevents = async () => {
-    return await api.get('/schedules', {
-      headers: {
-        'user-email': 'usuario3@gmail.com',
-      },
-    });
-  };
+  console.log(allUserEvents);
 
   useEffect(() => {
     setLoadingEvents(true);
-    try {
-      const response = fetchEevents();
-      response.then((e) => {
-        setEventsRegistered(e.data);
-      });
-      setLoadingEvents(false);
-    } catch (e) {
-      setLoadingEvents(false);
-      console.error(e);
-    }
+    fetchEvents();
+    setLoadingEvents(false);
   }, []);
 
   return (
@@ -101,17 +98,37 @@ export const ScheduleEvent = () => {
         </LocalizationProvider>
       </Calendar>
 
-      <ListEvents>
-        <h2>Seus Eventos</h2>
-        {!loadingEvents &&
-          eventsRegistered.length > 0 &&
-          eventsRegistered.map((event) => (
+      {!loadingEvents && allUserEvents.length > 0 && (
+        <ListEvents>
+          <h2>Seus Eventos</h2>
+          {allUserEvents.map((event) => (
             <div key={event.id} className="card">
               <CardBlur>
-                <button className="edit">
+                <button
+                  className="edit"
+                  onClick={() => {
+                    setEditEventModal({
+                      open: true,
+                      eventId: event.id,
+                      startDate: event.dateStart,
+                      description: event.description,
+                      endDate: event.dateEnd,
+                    });
+                  }}
+                >
                   <FaPencilAlt />
                 </button>
-                <button className="delete">
+                <button
+                  className="delete"
+                  onClick={() => {
+                    setDeleteEventModal({
+                      open: true,
+                      eventId: event.id,
+                      startDate: event.dateStart,
+                      description: event.description,
+                    });
+                  }}
+                >
                   <FaRegTrashAlt />
                 </button>
                 <h5>{event.description}</h5>
@@ -126,12 +143,13 @@ export const ScheduleEvent = () => {
               </CardBlur>
             </div>
           ))}
-      </ListEvents>
-
-      {!loadingEvents && eventsRegistered.length === 0 && (
-        <span>Não há eventos registrados</span>
+        </ListEvents>
       )}
 
+      {!loadingEvents && allUserEvents.length === 0 && (
+        <span>Não há eventos registrados</span>
+      )}
+      {/* Criar Evento */}
       <Dialog
         open={open}
         onClose={handleSetOpen}
@@ -141,9 +159,9 @@ export const ScheduleEvent = () => {
             event.preventDefault();
             const formData = new FormData(event.currentTarget);
             const formJson = Object.fromEntries(formData.entries());
-            const description = formJson.description;
+            const description = formJson.description as string;
 
-            handleCreateEvent(description.toString());
+            handleCreateEvent(description);
           },
         }}
       >
@@ -183,6 +201,157 @@ export const ScheduleEvent = () => {
           <Button onClick={handleSetOpen}>Cancelar</Button>
           <Button type="submit" disabled={!endDate}>
             Agendar Evento
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Deletar Evento */}
+      <Dialog
+        open={deleteEventModal.open}
+        onClose={() =>
+          setDeleteEventModal({
+            open: false,
+            eventId: '',
+            startDate: new Date(),
+            description: '',
+          })
+        }
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{'Excluir ?'}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Tem certeza que deseja excluir seu evento{' '}
+            <b>{deleteEventModal.description}</b> no dia{' '}
+            {new Date(deleteEventModal.startDate).toLocaleDateString('pt-BR')}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() =>
+              setDeleteEventModal({
+                open: false,
+                eventId: '',
+                startDate: new Date(),
+                description: '',
+              })
+            }
+          >
+            Cancelar
+          </Button>
+          <Button
+            onClick={async () => {
+              await handleDeleteEvent(deleteEventModal.eventId);
+              setDeleteEventModal({
+                open: false,
+                eventId: '',
+                startDate: new Date(),
+                description: '',
+              });
+            }}
+            autoFocus
+          >
+            Excluir
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Editar Evento */}
+      <Dialog
+        open={editEventModal.open}
+        onClose={() =>
+          setEditEventModal({
+            open: false,
+            eventId: '',
+            startDate: new Date(),
+            endDate: new Date(),
+            description: '',
+          })
+        }
+        PaperProps={{
+          component: 'form',
+          onSubmit: async (event: React.FormEvent<HTMLFormElement>) => {
+            event.preventDefault();
+            const formData = new FormData(event.currentTarget);
+            const formJson = Object.fromEntries(formData.entries());
+            const description = formJson.description as string;
+
+            await handleEditEvent({ ...editEventModal, description });
+            setEditEventModal({
+              open: false,
+              eventId: '',
+              startDate: new Date(),
+              endDate: new Date(),
+              description: '',
+            });
+          },
+        }}
+      >
+        <DialogTitle>Deseja atualizar seu evento ?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>Insira as novas informações</DialogContentText>
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="name"
+            name="description"
+            label="Descrição"
+            type="text"
+            fullWidth
+            variant="standard"
+            defaultValue={editEventModal.description}
+          />
+          <LocalizationProvider
+            dateAdapter={AdapterDayjs}
+            adapterLocale="pt-br"
+          >
+            <MobileDateTimePicker
+              label="Inicio"
+              defaultValue={dayjs(editEventModal.startDate)}
+              onAccept={(e: any) => {
+                setEditEventModal((prevState) => ({
+                  ...prevState,
+                  startDate: e.$d,
+                }));
+              }}
+            />
+            <MobileDateTimePicker
+              label="Fim"
+              defaultValue={dayjs(editEventModal.endDate)}
+              onAccept={(e: any) => {
+                setEditEventModal((prevState) => ({
+                  ...prevState,
+                  endDate: e.$d,
+                }));
+              }}
+            />
+          </LocalizationProvider>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() =>
+              setEditEventModal({
+                open: false,
+                eventId: '',
+                startDate: new Date(),
+                endDate: new Date(),
+                description: '',
+              })
+            }
+          >
+            Cancelar
+          </Button>
+          <Button
+            type="submit"
+            disabled={
+              !editEventModal.endDate ||
+              !editEventModal.startDate ||
+              !editEventModal.description
+            }
+          >
+            Confirmar
           </Button>
         </DialogActions>
       </Dialog>

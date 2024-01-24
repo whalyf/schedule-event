@@ -4,14 +4,13 @@
   font-family: 'Poppins', sans-serif;
   user-select: none;
 
-  /* 
-  justify-content: center;
-  align-items: center;
-  */
   margin: auto;
-  max-width: 1080px; 
 }
 
-.Toastify__toast{
+body {
+  background-color: #deb887;
+}
+
+.Toastify__toast {
   width: unset;
 }
