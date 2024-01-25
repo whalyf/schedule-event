@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 
 const scrollbarThin = css`
   &::-webkit-scrollbar-track {
-    background-color: #deb887;
+    background-color: #ddd;
   }
 
   &::-webkit-scrollbar {
@@ -35,9 +35,9 @@ export const Calendar = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  > div {
+  /* > div {
     background-color: #deb887;
-  }
+  } */
 `;
 export const ListEvents = styled.div`
   padding: 10px;
