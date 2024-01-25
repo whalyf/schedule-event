@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const WrapperHeader = styled.div`
   display: flex;
   background-color: #ddd;
-  height: 30px;
+  height: 40px;
   width: 100%;
   justify-content: flex-end;
   align-items: center;

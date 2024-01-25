@@ -25,6 +25,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { SchedulesController } from './controller';
 // STYLES
 import 'react-day-picker/dist/style.css';
+import { verifyEventStatus } from '../../utils/verifyEventStatus';
 import { Calendar, ListEvents, WraperScheduleEvent } from './styles';
 
 export const ScheduleEvent = () => {
@@ -107,7 +108,12 @@ export const ScheduleEvent = () => {
           <h2>Seus Eventos</h2>
           {allUserEvents.map((event) => (
             <div key={event.id} className="card">
-              <CardBlur>
+              <CardBlur
+                theme={verifyEventStatus({
+                  start: event.dateStart,
+                  end: event.dateEnd,
+                })}
+              >
                 <button
                   className="edit"
                   onClick={() => {

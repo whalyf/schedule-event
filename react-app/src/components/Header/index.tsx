@@ -13,6 +13,7 @@ export const Header = () => {
         location.pathname !== '/register' &&
         location.pathname !== '/' && (
           <WrapperHeader>
+            <h3>{user.name}</h3>
             <button onClick={signOut}>
               <FaSignOutAlt size={20} />
             </button>

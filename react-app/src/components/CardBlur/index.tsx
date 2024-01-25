@@ -1,8 +1,12 @@
-import { CardContainer } from "./styles";
+import { CardContainer } from './styles';
 interface ICardBlurProps {
   children: React.ReactNode;
+  theme?: 'past' | 'happening' | 'upcoming' | 'default';
 }
 
-export const CardBlur: React.FC<ICardBlurProps> = ({ children }) => {
-  return <CardContainer>{children}</CardContainer>;
+export const CardBlur: React.FC<ICardBlurProps> = ({
+  children,
+  theme = 'default',
+}) => {
+  return <CardContainer theme={theme}>{children}</CardContainer>;
 };

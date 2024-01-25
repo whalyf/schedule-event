@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
   const [user, setUser] = useState({
     email: localStorage.getItem('user-email') || '',
     password: '',
-    name: '',
+    name: localStorage.getItem('user-name') || '',
   });
 
   const signIn = useCallback(
@@ -32,6 +32,7 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
           toast(`Seja bem Vindo ${response.data.user.name}`);
           setUser(response.data.user);
           localStorage.setItem('user-email', response.data.user.email);
+          localStorage.setItem('user-name', response.data.user.name);
 
           navigate('/schedule-event');
         })
@@ -44,6 +45,7 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
 
   const signOut = useCallback(() => {
     localStorage.removeItem('user-email');
+    localStorage.removeItem('user-name');
     setUser({ email: '', password: '', name: '' });
     navigate('/');
   }, [navigate]);
