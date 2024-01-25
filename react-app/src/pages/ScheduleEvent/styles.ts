@@ -24,10 +24,6 @@ export const WraperScheduleEvent = styled.div`
   flex-direction: row;
   width: 70%;
 
-  .edit-event-date{
-    right: 49%;
-  }
-
   @media (max-width: 1200px) {
     width: 100%;
     flex-direction: column;
