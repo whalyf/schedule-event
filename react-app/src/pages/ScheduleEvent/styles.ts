@@ -20,12 +20,17 @@ const scrollbarThin = css`
 
 export const WraperScheduleEvent = styled.div`
   height: 100vh;
-  width: 50%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  width: 70%;
 
-  @media (min-width: 1500px) {
-    flex-direction: row;
+  .edit-event-date{
+    right: 49%;
+  }
+
+  @media (max-width: 1200px) {
+    width: 100%;
+    flex-direction: column;
   }
 `;
 

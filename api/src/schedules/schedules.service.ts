@@ -20,11 +20,22 @@ export class SchedulesService {
       where: {
         user_email,
       },
+      orderBy: {
+        dateStart: 'asc',
+      },
     });
   }
 
-  async findAll(): Promise<ISchedule[]> {
-    return await this.prisma.schedule.findMany();
+  async findAll() {
+    return await this.prisma.schedule.findMany({
+      select: {
+        description: true,
+        dateStart: true,
+        dateEnd: true,
+        id: false,
+        user_email: false,
+      },
+    });
   }
 
   async verifyDate(

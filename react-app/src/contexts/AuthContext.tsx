@@ -9,10 +9,8 @@ interface IAuthProvider {
 
 interface IAuthContextData {
   signIn: ({ email, password }: { email: string; password: string }) => void;
-  // signOut: () => void;
-  // user: IUserData;
-  // isAuthenticated: () => boolean;
   user: { email: string; password: string; name: string };
+  signOut: () => void;
 }
 
 export const AuthContext = createContext({} as IAuthContextData);
@@ -44,11 +42,27 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
     [navigate],
   );
 
+  const signOut = useCallback(() => {
+    localStorage.removeItem('user-email');
+    setUser({ email: '', password: '', name: '' });
+    navigate('/');
+  }, [navigate]);
+
+  // const fetchAllEvents = useCallback(async () => {
+  //   const response = await api.get('/schedules/events');
+  //   setAllEvents(response.data);
+  // }, []);
+
+  // useEffect(() => {
+  //   fetchAllEvents();
+  // }, []);
+
   return (
     <AuthContext.Provider
       value={{
         user,
         signIn,
+        signOut,
       }}
     >
       {children}

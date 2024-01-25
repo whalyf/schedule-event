@@ -6,6 +6,7 @@ export const WrapperLogin = styled.div`
   align-items: center;
   justify-content: center;
   display: flex;
+  flex-direction: column;
 
   > div h2 {
     width: 100%;

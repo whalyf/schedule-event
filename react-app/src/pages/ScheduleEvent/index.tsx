@@ -1,5 +1,7 @@
 import {
+  Backdrop,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -7,10 +9,7 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material';
-import {
-  LocalizationProvider,
-  MobileDateTimePicker,
-} from '@mui/x-date-pickers';
+import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { StaticDateTimePicker } from '@mui/x-date-pickers/StaticDateTimePicker';
 import dayjs from 'dayjs';
@@ -73,7 +72,6 @@ export const ScheduleEvent = () => {
     },
     [startDate, endDate, handleSetOpen, handleCreate],
   );
-  console.log(allUserEvents);
 
   useEffect(() => {
     setLoadingEvents(true);
@@ -83,12 +81,18 @@ export const ScheduleEvent = () => {
 
   return (
     <WraperScheduleEvent>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loadingEvents}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+
       <Calendar>
         <h2>Agendamento de Eventos</h2>
 
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
           <StaticDateTimePicker
-            orientation="landscape"
             onAccept={(e: any) => {
               setStartDate(e.$d as Date);
               handleSetOpen();
@@ -149,6 +153,7 @@ export const ScheduleEvent = () => {
       {!loadingEvents && allUserEvents.length === 0 && (
         <span>Não há eventos registrados</span>
       )}
+
       {/* Criar Evento */}
       <Dialog
         open={open}
@@ -188,7 +193,6 @@ export const ScheduleEvent = () => {
             adapterLocale="pt-br"
           >
             <StaticDateTimePicker
-              orientation="landscape"
               minDate={dayjs(startDate).add(1, 'day')}
               onAccept={(e: any) => {
                 setEndDate(e.$d as Date);
@@ -302,14 +306,15 @@ export const ScheduleEvent = () => {
             fullWidth
             variant="standard"
             defaultValue={editEventModal.description}
+            sx={{ mb: '20px' }}
           />
           <LocalizationProvider
             dateAdapter={AdapterDayjs}
             adapterLocale="pt-br"
           >
-            <MobileDateTimePicker
-              label="Inicio"
+            <DateTimePicker
               defaultValue={dayjs(editEventModal.startDate)}
+              disablePast
               onAccept={(e: any) => {
                 setEditEventModal((prevState) => ({
                   ...prevState,
@@ -317,9 +322,10 @@ export const ScheduleEvent = () => {
                 }));
               }}
             />
-            <MobileDateTimePicker
-              label="Fim"
+            <DateTimePicker
               defaultValue={dayjs(editEventModal.endDate)}
+              minDate={dayjs(editEventModal.startDate).add(1, 'day')}
+              disablePast
               onAccept={(e: any) => {
                 setEditEventModal((prevState) => ({
                   ...prevState,
