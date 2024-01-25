@@ -25,11 +25,11 @@ export class UsersController {
 
     if (!userAlreadyExists) {
       await this.usersService.create(createUserDto);
-      return res.status(HttpStatus.CREATED).json({ message: 'User Created' });
+      return res.status(HttpStatus.CREATED).json({ message: 'Usuário criado' });
     }
     return res
       .status(HttpStatus.CONFLICT)
-      .json({ message: 'User already exists' });
+      .json({ message: 'Usário já existe no sistema' });
   }
 
   @Get()
@@ -37,7 +37,7 @@ export class UsersController {
     return await this.usersService.findAll();
   }
 
-  @Get(':email')
+  @Post(':email')
   async findOne(
     @Param('email') email: string,
     @Body('password') password: string,
@@ -48,9 +48,11 @@ export class UsersController {
     if (!result) {
       return res
         .status(HttpStatus.NOT_FOUND)
-        .json({ message: 'No user found' });
+        .json({ message: 'Usuário não encontrado' });
     }
 
-    return res.json(result);
+    return res
+      .status(HttpStatus.OK)
+      .json({ message: 'Login Aprovado', user: result });
   }
 }

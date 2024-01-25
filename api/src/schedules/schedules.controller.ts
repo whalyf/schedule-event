@@ -76,7 +76,7 @@ export class SchedulesController {
       return res.status(HttpStatus.CREATED).json({ message: response });
     }
 
-    return res.status(HttpStatus.FORBIDDEN).json({
+    return res.status(HttpStatus.NOT_FOUND).json({
       message: `Esse evento não existe ou você não é o criador do mesmo`,
     });
   }
@@ -98,7 +98,7 @@ export class SchedulesController {
       return res.status(HttpStatus.OK).json({ message: response });
     }
 
-    return res.status(HttpStatus.FORBIDDEN).json({
+    return res.status(HttpStatus.NOT_FOUND).json({
       message: `Esse evento não existe ou você não é o responsável pelo mesmo`,
     });
   }
