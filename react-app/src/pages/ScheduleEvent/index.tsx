@@ -7,6 +7,9 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
   TextField,
 } from '@mui/material';
 import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
@@ -64,7 +67,7 @@ export const ScheduleEvent = () => {
   }, [open]);
 
   const handleCreateEvent = useCallback(
-    async (description: string) => {
+    async (description: string, access: 'public' | 'private') => {
       if (!endDate) {
         toast.error('Data final não foi selecionada');
       } else await handleCreate(description, startDate, endDate);
@@ -171,8 +174,9 @@ export const ScheduleEvent = () => {
             const formData = new FormData(event.currentTarget);
             const formJson = Object.fromEntries(formData.entries());
             const description = formJson.description as string;
+            const access = formJson.event as 'public' | 'private';
 
-            handleCreateEvent(description);
+            handleCreateEvent(description, access);
           },
         }}
       >
@@ -206,6 +210,25 @@ export const ScheduleEvent = () => {
               disablePast
             />
           </LocalizationProvider>
+
+          <RadioGroup
+            row
+            aria-labelledby="demo-row-radio-buttons-group-label"
+            name="access"
+            sx={{ justifyContent: 'center' }}
+            defaultValue="public"
+          >
+            <FormControlLabel
+              value="public"
+              control={<Radio />}
+              label="Público"
+            />
+            <FormControlLabel
+              value="private"
+              control={<Radio />}
+              label="Privado"
+            />
+          </RadioGroup>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleSetOpen}>Cancelar</Button>
