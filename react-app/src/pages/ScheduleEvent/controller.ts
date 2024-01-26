@@ -25,11 +25,15 @@ export const SchedulesController = (user_email: string) => {
       .catch((error) => toast.error(error.response.data.message));
   };
 
-  const handleCreate = async (
-    description: string,
-    startDate: Date,
-    endDate: Date,
-  ) => {
+  const handleCreateEvent = async ({
+    description,
+    startDate,
+    endDate,
+  }: {
+    description: string;
+    startDate: Date;
+    endDate: Date;
+  }) => {
     return await api
       .post(
         '/schedules',
@@ -99,7 +103,7 @@ export const SchedulesController = (user_email: string) => {
 
   return {
     fetchEvents,
-    handleCreate,
+    handleCreateEvent,
     handleDeleteEvent,
     handleEditEvent,
     allUserEvents,
