@@ -62,6 +62,11 @@ export class SchedulesController {
     @Body() updateScheduleDto: UpdateScheduleDto,
     @Res() res: Response,
   ) {
+    if (updateScheduleDto.dateStart > updateScheduleDto.dateEnd) {
+      return res.status(HttpStatus.NOT_FOUND).json({
+        message: `A data final deve ser posterior ao inicio do evento`,
+      });
+    }
     const scheduleExists = await this.schedulesService.findOne({
       id,
       user_email,
