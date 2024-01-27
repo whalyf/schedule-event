@@ -25,7 +25,7 @@ Para configurar o projeto localmente, siga estas instruções:
 1. Clone o repositório: `git clone https://github.com/whalyf/schedule-event.git`
 2. Instale as dependências do frontend: `cd react-app && npm install`
 3. Instale as dependências do backend: `cd api && npm install`
-4. Execute o backend: `npm start`
-5. Execute o frontend: `npm dev`
-6. Configure as variáveis de ambiente (crie um arquivo `.env`)
+4. Configure as variáveis de ambiente (crie um arquivo `.env` por exemplo com a chave `DATABASE_URL = 'file:./dev.db`)
+5. Execute o backend: `npm start`
+6. Execute o frontend: `npm dev`
 
