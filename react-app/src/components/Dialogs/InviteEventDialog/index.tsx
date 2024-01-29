@@ -23,7 +23,6 @@ export const InviteEventDialog = ({
     invited: string[];
   };
 }) => {
-  console.log(defineAccess);
   return (
     <Dialog
       open={defineAccess.open}

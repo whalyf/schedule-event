@@ -76,13 +76,13 @@ export const ListEvents = ({
             <span>Fim: {new Date(event.dateEnd).toLocaleString('pt-BR')}</span>
           </div>
           {event.access === 'public' ? (
-            <Tooltip title="Público">
+            <Tooltip title="Público" placement="top" arrow>
               <IconButton style={{ top: 0, cursor: 'default' }}>
                 <FaGlobe />
               </IconButton>
             </Tooltip>
           ) : (
-            <Tooltip title="Privado">
+            <Tooltip title="Privado" placement="top" arrow>
               <IconButton style={{ top: 0, cursor: 'default' }}>
                 <FaLock />
               </IconButton>

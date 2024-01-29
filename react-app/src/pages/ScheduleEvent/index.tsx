@@ -69,6 +69,7 @@ export const ScheduleEvent = () => {
     setLoadingEvents(true);
     fetchEvents();
     setLoadingEvents(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

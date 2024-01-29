@@ -92,28 +92,35 @@ export const EditEventDialog = ({
         sx={{ mb: '20px' }}
       />
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
-        <DateTimePicker
-          defaultValue={dayjs(editEventModal.startDate)}
-          disablePast
-          onAccept={(e: any) => {
-            console.log(typeof e);
-            setEditEventModal((prevState) => ({
-              ...prevState,
-              startDate: e.$d,
-            }));
+        <div
+          style={{
+            display: 'flex',
+            width: '100%',
+            justifyContent: 'space-evenly',
           }}
-        />
-        <DateTimePicker
-          defaultValue={dayjs(editEventModal.endDate)}
-          minDateTime={dayjs(editEventModal.startDate).add(1, 'm')}
-          disablePast
-          onAccept={(e: any) => {
-            setEditEventModal((prevState) => ({
-              ...prevState,
-              endDate: e.$d,
-            }));
-          }}
-        />
+        >
+          <DateTimePicker
+            defaultValue={dayjs(editEventModal.startDate)}
+            disablePast
+            onAccept={(e: any) => {
+              setEditEventModal((prevState) => ({
+                ...prevState,
+                startDate: e.$d,
+              }));
+            }}
+          />
+          <DateTimePicker
+            defaultValue={dayjs(editEventModal.endDate)}
+            minDateTime={dayjs(editEventModal.startDate).add(1, 'm')}
+            disablePast
+            onAccept={(e: any) => {
+              setEditEventModal((prevState) => ({
+                ...prevState,
+                endDate: e.$d,
+              }));
+            }}
+          />
+        </div>
       </LocalizationProvider>
     </DialogContent>
     <DialogActions>
