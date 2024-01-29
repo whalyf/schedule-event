@@ -11,18 +11,18 @@ import {
   DeleteEventDialog,
   EditEventDialog,
 } from '../../components/Dialogs';
-
+import { ListEvents } from '../../components/ListEvents';
 // CONTEXTS
 import { useAuth } from '../../hooks/useAuth';
 
 // CONTROLLERS
 import { SchedulesController } from './controller';
 
-// UTILS
-
 // STYLES
 import 'react-day-picker/dist/style.css';
-import { ListEvents } from '../../components/ListEvents';
+import { TCreateEventDialog } from '../../components/Dialogs/CreateEventDialog';
+import { TDeleteEventModal } from '../../components/Dialogs/DeleteEventDialog';
+import { TEditEventModal } from '../../components/Dialogs/EditEventDialog';
 import { Calendar, WraperScheduleEvent } from './styles';
 
 export const ScheduleEvent = () => {
@@ -37,21 +37,27 @@ export const ScheduleEvent = () => {
 
   const [loadingEvents, setLoadingEvents] = useState(false);
 
-  const [createEventModal, setCreateEventModal] = useState({
+  const [createEventModal, setCreateEventModal] = useState<
+    TCreateEventDialog['createEventModal']
+  >({
     open: false,
     startDate: new Date(),
-    endDate: new Date(),
+    endDate: null,
     description: '',
   });
 
-  const [deleteEventModal, setDeleteEventModal] = useState({
+  const [deleteEventModal, setDeleteEventModal] = useState<
+    TDeleteEventModal['deleteEventModal']
+  >({
     open: false,
     eventId: '',
     startDate: new Date(),
     description: '',
   });
 
-  const [editEventModal, setEditEventModal] = useState({
+  const [editEventModal, setEditEventModal] = useState<
+    TEditEventModal['editEventModal']
+  >({
     open: false,
     eventId: '',
     startDate: new Date(),

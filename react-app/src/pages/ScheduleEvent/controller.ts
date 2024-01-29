@@ -29,10 +29,14 @@ export const SchedulesController = (user_email: string) => {
     description,
     startDate,
     endDate,
+    access,
+    invited,
   }: {
     description: string;
     startDate: Date;
     endDate: Date;
+    access: 'public' | 'private';
+    invited: string[];
   }) => {
     return await api
       .post(
@@ -41,6 +45,8 @@ export const SchedulesController = (user_email: string) => {
           description,
           dateStart: startDate,
           dateEnd: endDate,
+          access,
+          invited,
         },
         {
           headers: {

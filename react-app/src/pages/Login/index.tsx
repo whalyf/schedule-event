@@ -1,17 +1,15 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { AiOutlineLock, AiOutlineMail } from 'react-icons/ai';
+import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
-//SERVICES
-
+// HOOKS
+import { useAuth } from '../../hooks/useAuth';
 // COMPONENTS
 import { Button } from '../../components/Button';
 import { CardBlur } from '../../components/CardBlur';
-
+import { Input } from '../../components/Input/DefaultInput';
 // STYLES
-import { useNavigate } from 'react-router-dom';
-import { Input } from '../../components/Input';
-import { useAuth } from '../../hooks/useAuth';
 import { WrapperLogin } from './styles';
 
 interface IFormValues {
