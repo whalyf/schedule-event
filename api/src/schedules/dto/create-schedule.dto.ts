@@ -19,6 +19,13 @@ export class CreateScheduleDto {
   @IsDate()
   readonly dateEnd: Date;
 
+  @IsString()
+  @IsNotEmpty()
+  readonly access: string;
+  @IsString()
+  @IsNotEmpty()
+  readonly invited: string;
+
   @ApiProperty()
   @IsString()
   @IsNotEmpty()

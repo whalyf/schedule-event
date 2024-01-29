@@ -24,5 +24,7 @@ model Schedule {
   dateStart   DateTime
   dateEnd     DateTime
   user_email  String   @default("")
+  access      String
+  invited     String
   users       Users    @relation(fields: [user_email], references: [email])
 }

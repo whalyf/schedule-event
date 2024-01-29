@@ -44,8 +44,8 @@ export type TCreateEventDialog = {
     description: string;
     startDate: Date;
     endDate: Date;
-    access: 'public' | 'private'
-    invited: string[]
+    access: 'public' | 'private';
+    invited: string[];
   }) => Promise<string | number | void>;
 };
 export const CreateEventDialog = ({
@@ -96,6 +96,8 @@ export const CreateEventDialog = ({
               invited: defineAccess.invited,
             });
           }
+
+          setDefineAccess({ open: false, access: 'public', invited: [] });
 
           setCreateEventModal({
             open: false,

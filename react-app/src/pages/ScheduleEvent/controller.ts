@@ -8,6 +8,8 @@ export interface ISchedule {
   dateStart: Date;
   dateEnd: Date;
   user_email: string;
+  access: 'public' | 'private';
+  invited: string[];
 }
 
 export const SchedulesController = (user_email: string) => {
@@ -46,7 +48,7 @@ export const SchedulesController = (user_email: string) => {
           dateStart: startDate,
           dateEnd: endDate,
           access,
-          invited,
+          invited: invited.toString(),
         },
         {
           headers: {

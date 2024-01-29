@@ -1,4 +1,5 @@
-import { FaPencilAlt, FaRegTrashAlt } from 'react-icons/fa';
+import { IconButton, Tooltip } from '@mui/material';
+import { FaGlobe, FaLock, FaPencilAlt, FaRegTrashAlt } from 'react-icons/fa';
 import { ISchedule } from '../../pages/ScheduleEvent/controller';
 import { verifyEventStatus } from '../../utils/verifyEventStatus';
 import { CardBlur } from '../CardBlur';
@@ -74,6 +75,19 @@ export const ListEvents = ({
             </span>
             <span>Fim: {new Date(event.dateEnd).toLocaleString('pt-BR')}</span>
           </div>
+          {event.access === 'public' ? (
+            <Tooltip title="Público">
+              <IconButton style={{ top: 0, cursor: 'default' }}>
+                <FaGlobe />
+              </IconButton>
+            </Tooltip>
+          ) : (
+            <Tooltip title="Privado">
+              <IconButton style={{ top: 0, cursor: 'default' }}>
+                <FaLock />
+              </IconButton>
+            </Tooltip>
+          )}
         </CardBlur>
       </div>
     ))}
