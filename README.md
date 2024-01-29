@@ -29,3 +29,7 @@ Para configurar o projeto localmente, siga estas instruções:
 5. Execute o backend: `npm start`
 6. Execute o frontend: `npm dev`
 
+## Sugestões de Melhorias
+1. Implementar GraphQL para as chamadas
+2. Utilizar react-query para manipulação dos dados em cache e melhor fluidez do app
+3. Utilizar postgreSQL para melhor manipulação dos dados
