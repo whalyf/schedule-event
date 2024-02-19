@@ -2,7 +2,7 @@
 
 ## Descrição
 
-O projeto **schedule-event** é uma aplicação para gerenciar eventos e programações. Ele fornece uma interface fácil e intuitiva de usar para os usuários agendarem e acompanharem eventos, seja para reuniões, conferências, ou qualquer outro tipo de evento programado.
+O projeto **schedule-event** é uma aplicação para gerenciar eventos e programações. Ele fornece uma interface fácil e intuitiva de usar para os usuários agendarem e acompanhar eventos, seja para reuniões, conferências, ou qualquer outro tipo de evento programado pelo anfitrião.
 
 ## Funcionalidades Principais
 
